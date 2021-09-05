@@ -168,13 +168,23 @@ class _HomePageState extends State<HomePage> {
                   //to avoid infinite looping
                   itemCount: streamSnapshot.data!.docs.length,
                   itemBuilder: (ctx,index){
+                    var data = streamSnapshot.data!.docs[index];
                     return SingleProduct(
                       onTap: (){
-                        RoutingPage.goToNext(context: context, navigateTo: DetailsPage());
+                        RoutingPage.goToNext(context: context, navigateTo: DetailsPage(
+                          productCategory: data["productCategory"],
+                          productId: data["productId"],
+                          productImage: data["productImage"],
+                            productName: data["productName"],
+                            productPrice:data["productPrice"],
+                            productOldPrice:data["productOldPrice"],
+                            productRate: data["productRate"],
+                            productDescription:data["productDescription"]
+                        ));
                       },
-                        image: streamSnapshot.data!.docs[index]["productImage"],
-                        name: streamSnapshot.data!.docs[index]["productName"],
-                        price: streamSnapshot.data!.docs[index]["productPrice"]
+                        image: data["productImage"],
+                        name: data["productName"],
+                        price: data["productPrice"]
                     );
 
                   },
@@ -207,13 +217,27 @@ class _HomePageState extends State<HomePage> {
                   //to avoid infinite looping
                   itemCount: streamSnapshot.data!.docs.length,
                   itemBuilder: (ctx,index){
+                    var data = streamSnapshot.data!.docs[index];
                     return SingleProduct(
                       onTap: (){
-
+                        RoutingPage.goToNext(
+                            context: context,
+                            navigateTo: DetailsPage(
+                                productCategory: data["productCategory"],
+                                productId: data["productId"],
+                        productImage: data["productImage"],
+                        productName: data["productName"],
+                        productPrice:data["productPrice"],
+                        productOldPrice:data["productOldPrice"],
+                        productRate: data["productRate"],
+                        productDescription:data["productDescription"]
+                            )
+                        );
                       },
-                        image: streamSnapshot.data!.docs[index]["productImage"],
-                        name: streamSnapshot.data!.docs[index]["productName"],
-                        price: streamSnapshot.data!.docs[index]["productPrice"]
+
+                        image: data["productImage"],
+                        name: data["productName"],
+                        price: data["productPrice"]
                     );
 
                   },

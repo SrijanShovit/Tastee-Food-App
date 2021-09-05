@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:tastee_food_app/PagesAfterSignedIn/details_page.dart';
+import 'package:tastee_food_app/Routing/routng_page.dart';
 import 'package:tastee_food_app/mywidgets/single_products.dart';
 
 class GridViewWidget extends StatelessWidget {
@@ -60,7 +62,18 @@ class GridViewWidget extends StatelessWidget {
                     itemBuilder:  (context,index){
                     var data = snapshot.data!.docs[index];
                       return SingleProduct(
-                        onTap: () {},
+                        onTap: () {
+                          RoutingPage.goToNext(context: context, navigateTo: DetailsPage(
+                            productCategory: data["productCategory"],
+                              productId: data["productId"],
+                          productImage: data["productImage"],
+                          productName: data["productName"],
+                          productPrice:data["productPrice"],
+                          productOldPrice:data["productOldPrice"],
+                          productRate: data["productRate"],
+                              productDescription:data["productDescription"])
+                          );
+                        },
                         image: data["productImage"],
                         name: data["productName"],
                         price: data["productPrice"],

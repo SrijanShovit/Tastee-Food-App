@@ -1,8 +1,31 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:tastee_food_app/PagesAfterSignedIn/cart.dart';
+import 'package:tastee_food_app/Routing/routng_page.dart';
 import 'package:tastee_food_app/mywidgets/mybutton.dart';
 
 class ProductDescription extends StatelessWidget {
-  const ProductDescription({Key? key}) : super(key: key);
+
+  final String productImage;
+  final String productName;
+  final int productPrice;
+  final int productOldPrice;
+  final int productRate;
+  final String productDescription;
+  final String productId;
+  final String productCategory;
+
+  const ProductDescription({Key? key,
+  required this.productName,
+    required this.productImage,
+    required this.productOldPrice,
+    required this.productPrice,
+    required this.productRate,
+    required this.productDescription,
+    required this.productId,
+    required this.productCategory
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +37,7 @@ class ProductDescription extends StatelessWidget {
           children: [
 
             Text(
-              "Product Name",
+              productName,
               style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold
@@ -23,9 +46,9 @@ class ProductDescription extends StatelessWidget {
 
             Row(
               children: [
-                Text('\$40'),
+                Text("Old Price: \$ $productOldPrice"),
                 SizedBox(width: 20,),
-                Text('\$40'),
+                Text('Current Price: \$ $productPrice'),
               ],
             ),
 
@@ -44,7 +67,7 @@ class ProductDescription extends StatelessWidget {
                       borderRadius: BorderRadius.circular(6)
                   ),
                   child: Center(
-                    child: Text("4.5",
+                    child: Text(productRate.toString(),
                       style: TextStyle(
                           color: Colors.white
                       ),),
@@ -66,9 +89,27 @@ class ProductDescription extends StatelessWidget {
                 Text("Description",style: TextStyle(
                     fontWeight: FontWeight.bold
                 ),),
-                Text("Description"),
+                Text(productDescription),
                 MyButton(
-                    onPressed: (){},
+                    onPressed: (){
+                      
+                      //before navigating to cart page we should send data to firebase
+                      
+                      FirebaseFirestore.instance.collection("cart").doc(FirebaseAuth.instance.currentUser!.uid)
+                          .collection("userCart").doc(productId).set({
+                        "productCategory":productCategory,
+                        "productId":productId,
+                        "productImage":productImage,
+                        "productName":productName,
+                        "productPrice":productPrice,
+                        "productOldPrice":productOldPrice,
+                        "productRate":productRate,
+                        "productDescription":productDescription,
+                        "productQuantity":1,
+                      });
+
+                      RoutingPage.goToNext(context: context, navigateTo: Cart());
+                    },
                     text: "Add to Cart")
               ],
             ),
